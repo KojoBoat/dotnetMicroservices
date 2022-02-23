@@ -22,13 +22,13 @@ namespace Basket.Api.Controllers
         [ProducesResponseType(typeof(ShoppingCart), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<ShoppingCart>> GetCart(string username)
         {
-            if(string.IsNullOrEmpty(username)) return NotFound(username);
+            if (string.IsNullOrEmpty(username)) return NotFound(username);
             var result = await basketRepository.GetCart(username);
-            if(result == null)
-            {
-                logger.LogError($"Error fetching cart for {username}");
-                return NotFound(username);
-            }
+            //if (result == null)
+            //{
+            //    logger.LogError($"Error fetching cart for {username}");
+            //    return NotFound($"Cart not found for {username}");
+            //}
             return Ok(result ?? new ShoppingCart(username));
         }
 

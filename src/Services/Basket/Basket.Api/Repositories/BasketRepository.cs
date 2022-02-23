@@ -20,11 +20,11 @@ namespace Basket.Api.Repositories
             if(cart != null) await redisCache.RemoveAsync(userName);
         }
 
-        public async Task<ShoppingCart?> GetCart(string userName)
+        public async Task<ShoppingCart> GetCart(string userName)
         {
             if (string.IsNullOrEmpty(userName)) throw new ArgumentNullException(nameof(userName));
             var cart = await redisCache.GetStringAsync(userName);
-            if (cart == null) return null;
+            if (string.IsNullOrEmpty(cart)) return null;
 
             return JsonConvert.DeserializeObject<ShoppingCart>(cart);
         }
@@ -33,7 +33,6 @@ namespace Basket.Api.Repositories
         {
             if (shoppingCart.UserName == null) throw new ArgumentNullException(nameof(shoppingCart.UserName));
             var getUserCart = await redisCache.GetStringAsync(shoppingCart.UserName);
-            if (getUserCart == null) return null;
 
             await redisCache.SetStringAsync(shoppingCart.UserName, JsonConvert.SerializeObject(shoppingCart));
 
