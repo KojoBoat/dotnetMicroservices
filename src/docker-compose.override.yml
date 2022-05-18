@@ -68,3 +68,12 @@ services:
     ports:
       - "8001:80"
 
+  discount.api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings:ConnectionString=mongodb://catalogdb:27017"
+    depends_on:
+      - discountdb
+    ports:
+      - "80"
+
