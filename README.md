@@ -4,7 +4,9 @@ Demonstrating microservices by building an e-commerce application. The applicati
 
 # Microservices
     - Catalog API
+        This service will be the Categories section of the e-commerce, a .net core web api project which depends on the MongoDB.
     - Basket API
+        This is more of a cart system, a .net core web api project, which uses Redis to implement caching.
     - Discount (gRPC)
     - Ordering API
 
