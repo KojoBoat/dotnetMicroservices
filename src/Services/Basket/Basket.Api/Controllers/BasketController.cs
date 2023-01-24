@@ -1,4 +1,5 @@
 ﻿using Basket.Api.Entities;
+using Basket.Api.GrpcServices;
 using Basket.Api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -11,11 +12,13 @@ namespace Basket.Api.Controllers
     {
         private readonly IBasketRepository basketRepository;
         private readonly ILogger<ShoppingCart> logger;
+        private readonly DiscountGrpcService _discountGrpcService;
 
-        public BasketController(IBasketRepository basketRepository, ILogger<ShoppingCart> logger)
+        public BasketController(IBasketRepository basketRepository, ILogger<ShoppingCart> logger, DiscountGrpcService discountGrpcService)
         {
-            this.basketRepository = basketRepository ?? throw new ArgumentNullException(nameof(basketRepository));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.basketRepository = basketRepository;
+            this.logger = logger;
+            _discountGrpcService = discountGrpcService;
         }
 
         [HttpGet("{username}", Name = "GetCart")]
@@ -32,11 +35,18 @@ namespace Basket.Api.Controllers
             return Ok(result ?? new ShoppingCart(username));
         }
 
-        [HttpPut]
+        [HttpPost]
         [ProducesResponseType(typeof(ShoppingCart), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<ShoppingCart>> UpdateCart([FromBody] ShoppingCart cart)
         {
             if(cart == null) return NotFound($"No cart found!");
+
+            //TODO: Consume Discount.GRPC and calculate final price of product
+            foreach (var item in cart.Items)
+            {
+                var coupon = await _discountGrpcService.GetDiscount(item.ProductName);
+                item.Price -= coupon.Amount;
+            }
             var result = await basketRepository.UpdateCart(cart);
             return Ok(result);
         } 

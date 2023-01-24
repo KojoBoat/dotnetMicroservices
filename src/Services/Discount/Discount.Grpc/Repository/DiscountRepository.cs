@@ -35,7 +35,7 @@ namespace Discount.Api.Repository
             var coupon = await connection.QueryFirstOrDefaultAsync<Coupon>
                 ("SELECT * FROM Coupon WHERE ProductName = @ProductName", new { ProductName = productName});
 
-            return coupon ??= new Coupon { ProductName = "No Discount", Amount = 0, Description = "No Discount Desc." };
+            return coupon ??= new Coupon { ProductName = productName, Amount = 0, Description = "No Discount Desc." };
         }
 
         public async Task<bool> UpdateDiscount(Coupon coupon)
