@@ -9,7 +9,7 @@ Demonstrating microservices by building an e-commerce application. The applicati
         This is more of a cart system, a .net core web api project, which uses Redis to implement caching.
     - Discount (gRPC) service is consumed by the Discount Api service. At checkout, system checks to see if there are available discounts for products on the system.
     - Ordering
-        This microservice is developed following **Clean Architecture, CQRS and DDD** model. This service handles when a user makes an order from the e-commerce site,           checkout page to be precise, to make payments.
+        This microservice is developed following ###Clean Architecture, CQRS and DDD### model. This service handles when a user makes an order from the e-commerce site,           checkout page to be precise, to make payments.
 
 # Technology leveraged
     (/) RabbitMQ
